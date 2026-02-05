@@ -1,0 +1,4 @@
+links.json
+*.txt
+last_success
+__pycache__/
