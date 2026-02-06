@@ -10,8 +10,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from chrome_driver_manager import ChromeDriverManager
-from link_loader import LinkLoader
+from util.chrome_driver_manager import ChromeDriverManager
+from util.link_loader import LinkLoader
 import time
 import platform
 

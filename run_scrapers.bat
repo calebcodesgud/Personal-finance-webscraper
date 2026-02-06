@@ -16,32 +16,6 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM Check if required files exist
-if not exist "run_scrapers.py" (
-    echo ERROR: run_scrapers.py not found
-    echo Please ensure all scraper files are in the same directory
-    pause
-    exit /b 1
-)
-
-if not exist "redfin_scraper.py" (
-    echo ERROR: redfin_scraper.py not found
-    pause
-    exit /b 1
-)
-
-if not exist "zillow_scraper.py" (
-    echo ERROR: zillow_scraper.py not found
-    pause
-    exit /b 1
-)
-
-if not exist "realtor_scraper.py" (
-    echo ERROR: realtor_scraper.py not found
-    pause
-    exit /b 1
-)
-
 REM Run the scraper
 echo Running scrapers...
 echo.

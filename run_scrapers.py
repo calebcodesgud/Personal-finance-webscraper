@@ -5,14 +5,14 @@ Runs Redfin, Zillow, Realtor.com, Bitnodes, and Etherscan scrapers
 """
 
 import sys
-from redfin_scraper import scrape_redfin_home_value
-from zillow_scraper import scrape_zillow_zestimate
-from realtor_scraper import scrape_realtor_home_value
-from bitnodes_scraper import scrape_bitcoin_node_count
-from etherscan_scraper import scrape_ethereum_node_count
-from chrome_driver_manager import ChromeDriverManager
-from date_gate import DateGate
-from link_loader import LinkLoader
+from scrapers.redfin_scraper import scrape_redfin_home_value
+from scrapers.zillow_scraper import scrape_zillow_zestimate
+from scrapers.realtor_scraper import scrape_realtor_home_value
+from scrapers.bitnodes_scraper import scrape_bitcoin_node_count
+from scrapers.etherscan_scraper import scrape_ethereum_node_count
+from util.chrome_driver_manager import ChromeDriverManager
+from util.date_gate import DateGate
+from util.link_loader import LinkLoader
 
 
 def get_price_num(price_str: str):

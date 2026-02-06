@@ -16,28 +16,6 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Check if required files exist
-if [ ! -f "run_scrapers.py" ]; then
-    echo "ERROR: run_scrapers.py not found"
-    echo "Please ensure all scraper files are in the same directory"
-    exit 1
-fi
-
-if [ ! -f "redfin_scraper.py" ]; then
-    echo "ERROR: redfin_scraper.py not found"
-    exit 1
-fi
-
-if [ ! -f "zillow_scraper.py" ]; then
-    echo "ERROR: zillow_scraper.py not found"
-    exit 1
-fi
-
-if [ ! -f "realtor_scraper.py" ]; then
-    echo "ERROR: realtor_scraper.py not found"
-    exit 1
-fi
-
 # Run the scraper
 echo "Running scrapers..."
 echo ""

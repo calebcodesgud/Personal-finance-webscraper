@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Bitnodes.io Bitcoin Nodes Scraper
-Scrapes the total number of Bitcoin nodes from bitnodes.io using headless Selenium
+Redfin Home Value Scraper
+Scrapes the home value from a Redfin property listing page using headless Selenium
 """
 
 from selenium import webdriver
@@ -10,21 +10,21 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from chrome_driver_manager import ChromeDriverManager
-from link_loader import LinkLoader
+from util.chrome_driver_manager import ChromeDriverManager
+from util.link_loader import LinkLoader
 import time
 import platform
 
-def scrape_bitcoin_node_count(url, driver=None):
+def scrape_redfin_home_value(url, driver=None):
     """
-    Scrape the total number of Bitcoin nodes from bitnodes.io
+    Scrape the home value from a Redfin property page
     
     Args:
-        url (str): The bitnodes.io URL
+        url (str): The Redfin property URL
         driver (webdriver.Chrome, optional): Existing Chrome driver instance. If None, creates a new one.
         
     Returns:
-        str: The total number of Bitcoin nodes as a string, or None if not found
+        str: The home value as a string, or None if not found
     """
     # Track if we created the driver (so we know whether to close it)
     driver_created = driver is None
@@ -36,19 +36,17 @@ def scrape_bitcoin_node_count(url, driver=None):
         print(f"Navigating to: {url}")
         driver.get(url)
         
-        # Wait for the page to load and the node count element to be present
+        # Wait for the page to load and the price element to be present
         wait = WebDriverWait(driver, 15)
-        
-        # Find the <a> tag with href="/nodes/"
-        node_count_element = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'a[href="."]'))
+        price_element = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.statsValue.price"))
         )
         
         # Extract the text
-        node_count = node_count_element.text.strip()
+        home_value = price_element.text.strip()
         
-        print(f"Total Bitcoin nodes found: {node_count}")
-        return node_count
+        print(f"Home value found: {home_value}")
+        return home_value
         
     except Exception as e:
         print(f"Error occurred: {str(e)}")
@@ -64,21 +62,21 @@ def main():
     # Load links from configuration
     LinkLoader.load()
     
-    # Scrape the total Bitcoin node count
-    node_count = scrape_bitcoin_node_count(LinkLoader.bitnodes)
+    # Scrape the home value
+    home_value = scrape_redfin_home_value(LinkLoader.redfin)
     
-    if node_count:
-        print(f"\n✓ Successfully scraped Bitcoin node count: {node_count}")
+    if home_value:
+        print(f"\n✓ Successfully scraped home value: {home_value}")
         
-        # Write the value to bitnodes.txt
+        # Write the value to redfin.txt
         try:
-            with open("bitnodes.txt", "w") as f:
-                f.write(node_count)
-            print(f"✓ Bitcoin node count saved to bitnodes.txt")
+            with open("redfin.txt", "w") as f:
+                f.write(home_value)
+            print(f"✓ Home value saved to redfin.txt")
         except Exception as e:
             print(f"✗ Error writing to file: {str(e)}")
     else:
-        print("\n✗ Failed to scrape Bitcoin node count")
+        print("\n✗ Failed to scrape home value")
 
 if __name__ == "__main__":
     main()
