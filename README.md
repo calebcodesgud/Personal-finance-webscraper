@@ -9,14 +9,15 @@ Automated scraper to get home values from Redfin, Zillow, and Realtor.com for th
 - `zillow_scraper.py` - Scrapes Zestimate from Zillow
 - `realtor_scraper.py` - Scrapes estimated home value from Realtor.com
 - `bitnodes_scraper.py` - Scrapes Bitcoin node count from Bitnodes.io
+- `coindance_scraper.py` - Scrapes Bitcoin node count from Coin.dance
 - `etherscan_scraper.py` - Scrapes Ethereum node count from Etherscan.io
 
 ### Core Files
-- `run_scrapers.py` - Main script that runs all five scrapers
+- `run_scrapers.py` - Main script that runs all enabled scrapers
 - `chrome_driver_manager.py` - Manages Chrome WebDriver instances
 - `link_loader.py` - Loads scraper URLs from configuration file
 - `date_gate.py` - Prevents running scrapers more than once per day
-- `links.json` - Configuration file containing all scraper URLs
+- `links.json` - Configuration file containing all scraper URLs and enabled flags
 
 ### Launchers
 - `run_scrapers.bat` - Windows executable launcher
@@ -96,19 +97,38 @@ Automated scraper to get home values from Redfin, Zillow, and Realtor.com for th
 
 ## Configuration
 
-All scraper URLs are stored in `links.json`. To update URLs for any scraper, simply edit this file:
+All scraper URLs are stored in `links.json`. Each entry has a `link` and an `enabled` flag. Set `enabled` to `false` to skip a scraper without removing it from the config:
 
 ```json
 {
-  "redfin": "https://www.redfin.com/OH/Columbus/285-E-Lane-Ave-43201/home/100731813",
-  "zillow": "https://www.zillow.com/homedetails/285-E-Lane-Ave-Columbus-OH-43201/33844741_zpid/",
-  "realtor": "https://www.realtor.com/myhome/285-E-Lane-Ave_Columbus_OH_43201_M40304-63511/prepare-to-sell",
-  "bitnodes": "https://bitnodes.io/nodes/",
-  "etherscan": "https://etherscan.io/nodetracker#"
+  "redfin": {
+    "link": "https://www.redfin.com/OH/Columbus/285-E-Lane-Ave-43201/home/100731813",
+    "enabled": true
+  },
+  "zillow": {
+    "link": "https://www.zillow.com/homedetails/285-E-Lane-Ave-Columbus-OH-43201/33844741_zpid/",
+    "enabled": true
+  },
+  "realtor": {
+    "link": "https://www.realtor.com/myhome/285-E-Lane-Ave_Columbus_OH_43201_M40304-63511/prepare-to-sell",
+    "enabled": true
+  },
+  "bitnodes": {
+    "link": "https://bitnodes.io/nodes/",
+    "enabled": true
+  },
+  "coindance": {
+    "link": "https://coin.dance/nodes",
+    "enabled": true
+  },
+  "etherscan": {
+    "link": "https://etherscan.io/nodetracker#",
+    "enabled": true
+  }
 }
 ```
 
-No code changes are needed when updating URLs - just modify the JSON file.
+No code changes are needed when updating URLs or toggling scrapers — just modify the JSON file.
 
 ## Usage
 
@@ -154,12 +174,15 @@ python3 run_scrapers.py
 
 ## Output
 
-The scraper creates five text files:
+The scraper creates up to six text files depending on which scrapers are enabled:
 - `redfin.txt` - Contains the home value from Redfin
 - `zillow.txt` - Contains the Zestimate from Zillow
 - `realtor.txt` - Contains the estimated home value from Realtor.com
-- `bitnodes.txt` - Contains the Bitcoin node count
-- `etherscan.txt` - Contains the Ethereum node count
+- `bitnodes.txt` - Contains the Bitcoin node count from Bitnodes.io
+- `coindance.txt` - Contains the Bitcoin node count from Coin.dance
+- `etherscan.txt` - Contains the Ethereum node count from Etherscan.io
+
+Output files are only created for scrapers that are enabled and run successfully.
 
 ## Running Individual Scrapers
 
@@ -178,11 +201,18 @@ python realtor_scraper.py
 # Bitnodes only
 python bitnodes_scraper.py
 
+# Coin.dance only
+python coindance_scraper.py
+
 # Etherscan only
 python etherscan_scraper.py
 ```
 
 Each individual scraper will automatically load its URL from `links.json`.
+
+## Enabled/Disabled Scrapers
+
+Each scraper can be independently toggled in `links.json` by setting its `enabled` field to `true` or `false`. Disabled scrapers are skipped entirely — no browser session is opened for them and no output file is written. The run summary will show `SKIPPED (disabled)` for any scraper that was turned off.
 
 ## Date Gate Feature
 
@@ -202,7 +232,10 @@ The last run date is stored in a file called `last_success`. To force the scrape
 
 ### "Configuration file 'links.json' not found"
 - Make sure `links.json` is in the same directory as the scraper scripts
-- The file should contain valid JSON with all five URL entries
+- The file should contain valid JSON with all entries in the `{ "link": "...", "enabled": true }` format
+
+### "No scrapers are enabled"
+- Check `links.json` and ensure at least one entry has `"enabled": true`
 
 ### Scraper returns no value
 - The website structure may have changed
@@ -220,4 +253,4 @@ The last run date is stored in a file called `last_success`. To force the scrape
 - Each scrape takes 10-20 seconds to complete
 - All scrapers share a single Chrome driver instance for efficiency
 - Website structures may change over time, requiring script updates
-- URLs are centrally managed in `links.json` for easy configuration
+- URLs and enabled flags are centrally managed in `links.json` for easy configuration
