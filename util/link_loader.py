@@ -14,13 +14,17 @@ class LinkLoader:
     
     Links are loaded from a JSON configuration file and exposed as
     public class variables accessible by all scrapers.
+    
+    Each entry in the config is expected to have the shape:
+        { "link": "https://...", "enabled": true }
     """
     
-    # Public class variables for scraper URLs
+    # Public class variables for scraper URLs (None if disabled or not loaded)
     redfin = None
     zillow = None
     realtor = None
     bitnodes = None
+    coindance = None
     etherscan = None
     
     @classmethod
@@ -44,12 +48,13 @@ class LinkLoader:
         with open(config_path, 'r') as f:
             links = json.load(f)
         
-        # Load each URL from the config
-        cls.redfin = links['redfin']
-        cls.zillow = links['zillow']
-        cls.realtor = links['realtor']
-        cls.bitnodes = links['bitnodes']
-        cls.etherscan = links['etherscan']
+        # Load each URL from the config; set to None if disabled
+        cls.redfin    = links['redfin']['link']    if links['redfin']['enabled']    else None
+        cls.zillow    = links['zillow']['link']    if links['zillow']['enabled']    else None
+        cls.realtor   = links['realtor']['link']   if links['realtor']['enabled']   else None
+        cls.bitnodes  = links['bitnodes']['link']  if links['bitnodes']['enabled']  else None
+        cls.coindance = links['coindance']['link'] if links['coindance']['enabled'] else None
+        cls.etherscan = links['etherscan']['link'] if links['etherscan']['enabled'] else None
         
         print(f"Successfully loaded links from {config_file}")
     
@@ -59,28 +64,30 @@ class LinkLoader:
         Get all loaded URLs as a dictionary.
         
         Returns:
-            dict: Dictionary containing all scraper URLs.
+            dict: Dictionary containing all scraper URLs (None if disabled).
         """
         return {
-            'redfin': cls.redfin,
-            'zillow': cls.zillow,
-            'realtor': cls.realtor,
-            'bitnodes': cls.bitnodes,
-            'etherscan': cls.etherscan
+            'redfin':    cls.redfin,
+            'zillow':    cls.zillow,
+            'realtor':   cls.realtor,
+            'bitnodes':  cls.bitnodes,
+            'coindance': cls.coindance,
+            'etherscan': cls.etherscan,
         }
     
     @classmethod
     def is_loaded(cls):
         """
-        Check if links have been loaded.
+        Check if all enabled links have been loaded.
         
         Returns:
-            bool: True if all links are loaded, False otherwise.
+            bool: True if all links are loaded (enabled ones are non-None).
         """
         return all([
             cls.redfin is not None,
             cls.zillow is not None,
             cls.realtor is not None,
             cls.bitnodes is not None,
-            cls.etherscan is not None
+            cls.coindance is not None,
+            cls.etherscan is not None,
         ])
