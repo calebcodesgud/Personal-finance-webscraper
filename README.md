@@ -254,3 +254,6 @@ The last run date is stored in a file called `last_success`. To force the scrape
 - All scrapers share a single Chrome driver instance for efficiency
 - Website structures may change over time, requiring script updates
 - URLs and enabled flags are centrally managed in `links.json` for easy configuration
+
+
+Thanks for using my software, I hope you like it :)
