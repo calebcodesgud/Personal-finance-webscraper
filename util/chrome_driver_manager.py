@@ -44,18 +44,18 @@ class ChromeDriverManager:
         
         # Initialize the Chrome driver
         # On Linux, specify Chrome binary and chromedriver path if needed
-        if system == "Linux":
-            # Use chromium-browser binary
-            chrome_options.binary_location = "/usr/bin/chromium-browser"
-            
-            # Try to find chromedriver
-            CHROME_DRIVER_PATH = "/usr/bin/chromedriver"
-            service = Service(executable_path=CHROME_DRIVER_PATH)
-            service.log_path = "/tmp/chromedriver_shared.log"
-            print(f"Starting Chrome with chromedriver at: {CHROME_DRIVER_PATH}")
-            driver = webdriver.Chrome(options=chrome_options, service=service)
-        else:
-            driver = webdriver.Chrome(options=chrome_options)
+#         if system == "Linux":
+#             # Use chromium-browser binary
+#             chrome_options.binary_location = "/usr/bin/chromium-browser"
+#
+#             # Try to find chromedriver
+#             CHROME_DRIVER_PATH = "/usr/bin/chromedriver"
+#             service = Service(executable_path=CHROME_DRIVER_PATH)
+#             service.log_path = "/tmp/chromedriver_shared.log"
+#             print(f"Starting Chrome with chromedriver at: {CHROME_DRIVER_PATH}")
+#             driver = webdriver.Chrome(options=chrome_options, service=service)
+#         else:
+        driver = webdriver.Chrome(options=chrome_options)
         
         print("Chrome driver started successfully")
         return driver
