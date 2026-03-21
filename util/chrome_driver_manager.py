@@ -52,8 +52,8 @@ class ChromeDriverManager:
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920,1080")
 
-
         version = ChromeDriverManager._get_chromium_version()
+
         # Detect OS and set appropriate user agent
         system = platform.system()
         if system == "Windows":
@@ -65,7 +65,6 @@ class ChromeDriverManager:
         else:
             user_agent = f"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{version} Safari/537.36"
 
-        print(user_agent)
 
         chrome_options.add_argument(f"user-agent={user_agent}")
 
