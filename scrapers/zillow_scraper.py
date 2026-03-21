@@ -37,11 +37,11 @@ def scrape_zillow_zestimate(url, driver=None):
         driver.get(url)
         
         # Wait for the page to load and the Zestimate element to be present
-        wait = WebDriverWait(driver, 15)
+        wait = WebDriverWait(driver, 7)
         
         # Find the p tag with data-testid="primary-zestimate"
         zestimate_element = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 'p[data-testid="primary-zestimate"]'))
+            EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="primary-zestimate"]'))
         )
         
         # Extract the text
